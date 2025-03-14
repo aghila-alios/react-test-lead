@@ -1,5 +1,4 @@
-import { LoanParameters, MortgageResults, YearlyBreakdown } from "@/utils/types";
-import { range } from "../util";
+import { LoanParameters, MortgageResults, Nullable, YearlyBreakdown } from "@/utils/types";
 
 /**
  * Calculates the monthly mortgage payment.
@@ -36,12 +35,19 @@ export function calculateMonthlyPayment(
 /**
  * Calculates the yearly break down.
  *
- * @param loanParameters - All the values user entered through mortgage details form.
+ * @param propertyPrice - The price of the property.
+ * @param deposit - The deposit amount.
+ * @param annualInterestRate - The annual interest rate.
+ * @param mortgageTermInYears - The mortgage term in years.
  * @returns An array containing the year and remaining debt for each year up to the selected maximum term
  */
 
-export const calculateYearlyBreakdown = (loanParameters: LoanParameters): YearlyBreakdown[] => {
-	const { propertyPrice, deposit, mortgageTermInYears, annualInterestRate } = loanParameters;
+export const getYearlyBreakdown = (
+	propertyPrice: number,
+	deposit: number,
+	mortgageTermInYears: number,
+	annualInterestRate: number
+): YearlyBreakdown[] => {
 	const monthlyInterestRate = annualInterestRate / 100 / 12;
 	const capitalAmount = calculateCapitalAmount(propertyPrice, deposit);
 	const monthlyPaymentAmount = calculateMonthlyPayment(
@@ -80,17 +86,24 @@ const calculateTotalInterestAmount = (totalRepaymentAmount: number, capitalAmoun
 /**
  * Calculates the results to display on mortgage results section.
  *
- * @param loanParameters - All the values user entered through mortgage details form.
+ * @param propertyPrice - The price of the property.
+ * @param deposit - The deposit amount.
+ * @param annualInterestRate - The annual interest rate.
+ * @param mortgageTermInYears - The mortgage term in years.
  * @returns An object contains  monthly payment amount, total repayment amount, capital, total interest and affordability check
  */
-export const getMortgageResults = (loanParameters: LoanParameters): MortgageResults => {
-	const { propertyPrice, deposit, mortgageTermInYears, annualInterestRate } = loanParameters;
+export const getMortgageResults = (
+	propertyPrice: number,
+	deposit: number,
+	mortgageTermInYears: number,
+	annualInterestRate: number
+): MortgageResults => {
 	const monthlyPaymentAmount = calculateMonthlyPayment(
 		propertyPrice,
 		deposit,
 		annualInterestRate,
 		mortgageTermInYears
-	)
+	);
 	const totalRepaymentAmount = calculateTotalRepaymentAmount(
 		monthlyPaymentAmount,
 		mortgageTermInYears
@@ -110,4 +123,33 @@ export const getMortgageResults = (loanParameters: LoanParameters): MortgageResu
 		totalInterestAmount,
 		affordabilityCheck,
 	};
+};
+export const calculateMortgageResults = (
+	loanParameters: LoanParameters
+): Nullable<MortgageResults> => {
+	const { propertyPrice, deposit, mortgageTermInYears, annualInterestRate } = loanParameters;
+	if (propertyPrice && deposit && mortgageTermInYears && annualInterestRate) {
+		return getMortgageResults(
+			propertyPrice,
+			deposit,
+			mortgageTermInYears,
+			annualInterestRate
+		);
+	}
+	return null;
+};
+
+export const calculateYearlyBreakdown = (
+	loanParameters: LoanParameters
+): Nullable<YearlyBreakdown[]> => {
+	const { propertyPrice, deposit, mortgageTermInYears, annualInterestRate } = loanParameters;
+	if (propertyPrice && deposit && mortgageTermInYears && annualInterestRate) {
+		return getYearlyBreakdown(
+			propertyPrice,
+			deposit,
+			mortgageTermInYears,
+			annualInterestRate
+		);
+	}
+	return null;
 };

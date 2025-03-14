@@ -1,7 +1,7 @@
 import { useState } from "react";
 import {
 	calculateYearlyBreakdown,
-	getMortgageResults,
+	calculateMortgageResults,
 } from "@/utils/MortgageCalculator/calculateRepayment";
 import { LoanParameters, MortgageResults, Nullable, YearlyBreakdown } from "../utils/types";
 import { Row, Container } from "react-bootstrap";
@@ -50,14 +50,15 @@ export default function MortgageCalculator({ rate }: BOEProps) {
 	};
 
 	const handleSubmit = () => {
-		const mortgageResults = getMortgageResults(loanParameters);
-		setResults({
-			...results,
-			...mortgageResults,
-		});
+		const mortgageResults = calculateMortgageResults(loanParameters);
+		!!mortgageResults &&
+			setResults({
+				...results,
+				...mortgageResults,
+			});
 
 		const breakdownResults = calculateYearlyBreakdown(loanParameters);
-		setYearlyBreakdown(breakdownResults);
+		!!breakdownResults && setYearlyBreakdown(breakdownResults);
 	};
 	return (
 		<Container>

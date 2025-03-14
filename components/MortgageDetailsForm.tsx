@@ -2,6 +2,7 @@
 import { Col, Form, Button } from "react-bootstrap";
 import NumberInput from "./NumberInput";
 import { LoanParameters } from "@/utils/types";
+
 type MortgageDetailsFormProps = {
 	loanParameters: LoanParameters;
 	onChange: (key: string, value: number) => void;
