@@ -1,8 +1,8 @@
 export type LoanParameters = {
-	propertyPrice: number;
-	deposit: number;
-	mortgageTermInYears: number;
-	annualInterestRate: number;
+	propertyPrice: Nullable<number>;
+	deposit: Nullable<number>;
+	mortgageTermInYears: Nullable<number>;
+	annualInterestRate: Nullable<number>;
 };
 
 export type MortgageResults = {

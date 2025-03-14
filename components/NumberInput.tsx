@@ -5,7 +5,7 @@ type NumberInputProps = {
 	id: string;
 	name: string;
 	label: string;
-	value: number | undefined;
+	value: number | null;
 	className?: string;
 	placeholder?: string;
 	step?: string | number;
@@ -47,7 +47,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
 					id={id}
 					name={name}
 					type="number"
-					value={value}
+					value={value !== null ? value : undefined}
 					onChange={handleChange}
 					className={className}
 					step={step}

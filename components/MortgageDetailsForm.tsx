@@ -8,6 +8,7 @@ type MortgageDetailsFormProps = {
 	onSubmit: () => void;
 };
 const MortgageDetailsForm = ({ loanParameters, onChange, onSubmit }: MortgageDetailsFormProps) => {
+	const buttonDisabled = Object.values(loanParameters).some((value) => value === null);
 	return (
 		<>
 			<Col className="border-r" md="auto">
@@ -63,6 +64,7 @@ const MortgageDetailsForm = ({ loanParameters, onChange, onSubmit }: MortgageDet
 						className="w-full"
 						variant="primary"
 						aria-label="Calculate"
+						disabled={buttonDisabled}
 						onClick={onSubmit}>
 						Calculate
 					</Button>

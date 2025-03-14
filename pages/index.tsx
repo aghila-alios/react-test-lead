@@ -9,13 +9,12 @@ import MortgageDetailsForm from "@/components/MortgageDetailsForm";
 import MortgageResultsPage from "@/components/MortgageResultsPage";
 import YearlyBreakdownPage from "@/components/YearlyBreakdownPage";
 import { GetServerSideProps } from "next";
-import { VisibleComponet } from "@/components/VisibleComponent";
 
 let initLoanParameters: LoanParameters = {
-	propertyPrice: 0,
-	deposit: 0,
-	mortgageTermInYears: 0,
-	annualInterestRate: 0,
+	propertyPrice: null,
+	deposit: null,
+	mortgageTermInYears: null,
+	annualInterestRate: null,
 };
 
 type BOEProps = {
@@ -71,9 +70,9 @@ export default function MortgageCalculator({ rate }: BOEProps) {
 				/>
 
 				{!!results && <MortgageResultsPage results={results} />}
-				<VisibleComponet visible={!!yearlyBreakdown}>
+				{!!yearlyBreakdown && (
 					<YearlyBreakdownPage yearlyBreakdown={yearlyBreakdown || []} />
-				</VisibleComponet>
+				)}
 			</Row>
 		</Container>
 	);
