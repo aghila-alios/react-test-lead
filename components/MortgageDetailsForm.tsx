@@ -11,7 +11,7 @@ const MortgageDetailsForm = ({ loanParameters, onChange, onSubmit }: MortgageDet
 	return (
 		<>
 			<Col className="border-r" md="auto">
-				<Form>
+				<Form aria-label="Mortgage details form">
 					<NumberInput
 						id="price"
 						name="price"
@@ -59,7 +59,11 @@ const MortgageDetailsForm = ({ loanParameters, onChange, onSubmit }: MortgageDet
 							onChange("annualInterestRate", value)
 						}
 					/>
-					<Button className="w-full" variant="primary" onClick={onSubmit}>
+					<Button
+						className="w-full"
+						variant="primary"
+						aria-label="Calculate"
+						onClick={onSubmit}>
 						Calculate
 					</Button>
 				</Form>

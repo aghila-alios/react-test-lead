@@ -18,8 +18,10 @@ const MortgageResultsPage = ({ results }: MortgageResultsPageProps) => {
 	return (
 		<>
 			<Col md="auto">
-				<h2 className="pb-3">Results</h2>
-				<Table striped="columns">
+				<h2 className="pb-3" aria-label="Mortgage results">
+					Results
+				</h2>
+				<Table striped="columns" aria-label="Mortgage results table">
 					<tbody>
 						<tr className="border-b border-t">
 							<td>Monthly Payment</td>

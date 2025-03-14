@@ -33,7 +33,14 @@ export function calculateMonthlyPayment(
 	return monthlyPayment;
 }
 
-export const calculateYearlyBreakdown = (loanParameters: LoanParameters) => {
+/**
+ * Calculates the yearly break down.
+ *
+ * @param loanParameters - All the values user entered through mortgage details form.
+ * @returns An array containing the year and remaining debt for each year up to the selected maximum term
+ */
+
+export const calculateYearlyBreakdown = (loanParameters: LoanParameters): YearlyBreakdown[] => {
 	const { propertyPrice, deposit, mortgageTermInYears, annualInterestRate } = loanParameters;
 	const monthlyInterestRate = annualInterestRate / 100 / 12;
 	const capitalAmount = calculateCapitalAmount(propertyPrice, deposit);
@@ -70,6 +77,12 @@ const calculateCapitalAmount = (propertyPrice: number, deposit: number) => prope
 const calculateTotalInterestAmount = (totalRepaymentAmount: number, capitalAmount: number) =>
 	totalRepaymentAmount - capitalAmount;
 
+/**
+ * Calculates the results to display on mortgage results section.
+ *
+ * @param loanParameters - All the values user entered through mortgage details form.
+ * @returns An object contains  monthly payment amount, total repayment amount, capital, total interest and affordability check
+ */
 export const getMortgageResults = (loanParameters: LoanParameters): MortgageResults => {
 	const { propertyPrice, deposit, mortgageTermInYears, annualInterestRate } = loanParameters;
 	const monthlyPaymentAmount = calculateMonthlyPayment(
