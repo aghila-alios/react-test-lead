@@ -4,11 +4,12 @@ import {
 	getMortgageResults,
 } from "@/utils/MortgageCalculator/calculateRepayment";
 import { LoanParameters, MortgageResults, Nullable, YearlyBreakdown } from "../utils/types";
-import { Row, Container, Col, Table } from "react-bootstrap";
+import { Row, Container } from "react-bootstrap";
 import MortgageDetailsForm from "@/components/MortgageDetailsForm";
 import MortgageResultsPage from "@/components/MortgageResultsPage";
 import YearlyBreakdownPage from "@/components/YearlyBreakdownPage";
 import { GetServerSideProps } from "next";
+import { VisibleComponet } from "@/components/VisibleComponent";
 
 let initLoanParameters: LoanParameters = {
 	propertyPrice: 0,
@@ -17,15 +18,16 @@ let initLoanParameters: LoanParameters = {
 	annualInterestRate: 0,
 };
 
-type Props = {
+type BOEProps = {
 	rate: number | null;
 	error?: string;
 };
 
-export const getServerSideProps: GetServerSideProps<Props> = async () => {
+export const getServerSideProps: GetServerSideProps<BOEProps> = async () => {
+	const boeURL = "http://localhost:3000/api/rates";
 	try {
-		const res = await fetch("http://localhost:3000/api/rates");
-		if (!res.ok) throw new Error(`Failed to fetch: ${res.statusText}`);
+		const res = await fetch(boeURL);
+		if (!res.ok) throw new Error(`Failed to fetch Bank of England rate: ${res.statusText}`);
 		const result = await res.json();
 		return {
 			props: { rate: result.success ? result.data : null, error: result.error || "" },
@@ -35,7 +37,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async () => {
 	}
 };
 
-export default function MortgageCalculator({ rate, error }: Props) {
+export default function MortgageCalculator({ rate }: BOEProps) {
 	if (!!rate) initLoanParameters = { ...initLoanParameters, annualInterestRate: rate };
 	const [loanParameters, setLoanParameters] = useState<LoanParameters>(initLoanParameters);
 	const [results, setResults] = useState<Nullable<MortgageResults>>(null);
@@ -67,9 +69,11 @@ export default function MortgageCalculator({ rate, error }: Props) {
 					onChange={handleChange}
 					onSubmit={handleSubmit}
 				/>
-				{!!results && <MortgageResultsPage results={results} />}
 
-				<YearlyBreakdownPage yearlyBreakdown={yearlyBreakdown || []} />
+				{!!results && <MortgageResultsPage results={results} />}
+				<VisibleComponet visible={!!yearlyBreakdown}>
+					<YearlyBreakdownPage yearlyBreakdown={yearlyBreakdown || []} />
+				</VisibleComponet>
 			</Row>
 		</Container>
 	);

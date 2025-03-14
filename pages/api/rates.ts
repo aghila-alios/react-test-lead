@@ -17,12 +17,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const response = await fetch(endpointUrl)
         console.log(`${response.status}`)
         if (!response.ok) {
-            throw new Error(`Failed to fetch data from BOE with error status - ${endpointUrl}`)
+            throw new Error(`Failed to fetch data from BOE with error status - ${response.status}`)
         }
         const csvData = await response.text()
         const data: dataType[] = await parseCSVData(csvData)
         const rate = parseFloat(data[0].IUMABEDR)
-        res.status(200).json({ success: true, data: rate.toFixed(2) });
+        if (!!rate) {
+            res.status(200).json({ success: true, data: rate.toFixed(2) });
+        } else {
+            throw new Error(`Failed to fetch data from BOE with error status - ${response.status}`)
+        }
+
     } catch (err) {
         res.status(500).json({ success: false, error: (err as Error).message });
     }
