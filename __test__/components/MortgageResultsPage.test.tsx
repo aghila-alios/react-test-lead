@@ -10,7 +10,7 @@ describe("MortgageResultsPAge component", () => {
 		totalInterestAmount: 135715.65,
 		affordabilityCheck: 3337.24,
 	};
-	test("verify component renders with results", () => {
+	test("verify component renders correctly with results", () => {
 		render(<MortgageResultsPage results={results} />);
 
 		expect(screen.getByRole("heading", { name: /Mortgage results/i })).toBeInTheDocument();

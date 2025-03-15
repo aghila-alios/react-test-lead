@@ -18,7 +18,7 @@ describe("YearlyBreakdownPage component", () => {
 		},
 	];
 
-	test("verify YearlyBreakdownPage component displays with yearly breakdown correctly", () => {
+	test("verify YearlyBreakdownPage component correctly displays with yearly breakdown", () => {
 		render(<YearlyBreakdownPage yearlyBreakdown={yearlyBreakdown} />);
 
 		expect(screen.getByRole("heading", { name: /Yearly breakdown/i })).toBeInTheDocument();
