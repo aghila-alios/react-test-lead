@@ -1,4 +1,5 @@
-import { formatCurrency } from "./formatCurrency";
+import { formatCurrency } from "@/utils/formatCurrency";
+
 
 describe("formatCurrency", () => {
 	it("should format the given amount with default decimal places", () => {

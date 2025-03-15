@@ -1,4 +1,4 @@
-import { LoanParameters, MortgageResults, Nullable, YearlyBreakdown } from "@/utils/types";
+import { LoanParameters, MortgageResults, NonNullableLP, Nullable, YearlyBreakdown } from "@/utils/types";
 
 /**
  * Calculates the monthly mortgage payment.
@@ -152,4 +152,48 @@ export const calculateYearlyBreakdown = (
 		);
 	}
 	return null;
+};
+
+
+export const verifyLPisNonNullable = (loanParameters: LoanParameters): Nullable<NonNullableLP> => {
+	const { propertyPrice, deposit, mortgageTermInYears, annualInterestRate } = loanParameters;
+	if (propertyPrice && deposit && mortgageTermInYears && annualInterestRate) {
+		return loanParameters as NonNullableLP
+	}
+	return null
+
+}
+
+
+export const getMortgageResultsNonNullable = (
+	loanParameters: LoanParameters
+): Nullable<MortgageResults> => {
+	const lp = verifyLPisNonNullable(loanParameters)
+	if (!lp) return null
+	const { propertyPrice, deposit, mortgageTermInYears, annualInterestRate } = lp;
+	const monthlyPaymentAmount = calculateMonthlyPayment(
+		propertyPrice,
+		deposit,
+		annualInterestRate,
+		mortgageTermInYears
+	);
+	const totalRepaymentAmount = calculateTotalRepaymentAmount(
+		monthlyPaymentAmount,
+		mortgageTermInYears
+	);
+	const capitalAmount = calculateCapitalAmount(propertyPrice, deposit);
+	const totalInterestAmount = calculateTotalInterestAmount(totalRepaymentAmount, capitalAmount);
+	const affordabilityCheck = calculateMonthlyPayment(
+		propertyPrice,
+		deposit,
+		annualInterestRate + 3,
+		mortgageTermInYears
+	);
+	return {
+		monthlyPaymentAmount,
+		totalRepaymentAmount,
+		capitalAmount,
+		totalInterestAmount,
+		affordabilityCheck,
+	};
 };

@@ -5,6 +5,10 @@ export type LoanParameters = {
 	annualInterestRate: Nullable<number>;
 };
 
+export type NonNullableLP = {
+	[K in keyof LoanParameters]: NonNullable<LoanParameters[K]>
+}
+
 export type MortgageResults = {
 	monthlyPaymentAmount: number;
 	totalRepaymentAmount: number;

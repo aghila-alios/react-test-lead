@@ -1,8 +1,5 @@
-import {
-	calculateMonthlyPayment,
-	getYearlyBreakdown,
-	getMortgageResults,
-} from "./calculateRepayment";
+import { calculateMonthlyPayment, getMortgageResults, getYearlyBreakdown } from "@/utils/MortgageCalculator/calculateRepayment";
+
 
 describe("calculateMonthlyPayment", () => {
 	test("should calculate the correct monthly payment with interest", () => {
