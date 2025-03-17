@@ -1,14 +1,16 @@
 "use client";
 import { Col, Form, Button } from "react-bootstrap";
 import NumberInput from "./NumberInput";
-import { LoanParameters } from "@/utils/types";
+import { LoanParameters, LPErrorType, Nullable } from "@/utils/types";
 import {
 	hasErrors,
 	validateDeposit,
 	validateInterestRate,
+	validateLoanParameters,
 	validateMortgageTerm,
 	validatePropertyPrice,
 } from "@/validation/validateMortgageFormFields";
+import { useState } from "react";
 
 type MortgageDetailsFormProps = {
 	loanParameters: LoanParameters;
@@ -17,7 +19,12 @@ type MortgageDetailsFormProps = {
 };
 
 const MortgageDetailsForm = ({ loanParameters, onChange, onSubmit }: MortgageDetailsFormProps) => {
-	const disableButton = hasErrors(loanParameters);
+	const [error, SetError] = useState<Nullable<LPErrorType>>(null);
+	const isValid = hasErrors(loanParameters);
+	const handleSubmit = () => {
+		SetError(validateLoanParameters(loanParameters));
+		!isValid && onSubmit();
+	};
 	return (
 		<>
 			<Col className="border-r" md="auto">
@@ -33,6 +40,7 @@ const MortgageDetailsForm = ({ loanParameters, onChange, onSubmit }: MortgageDet
 						groupTextBefore={true}
 						onChange={(value) => onChange("propertyPrice", value)}
 						validate={(value) => validatePropertyPrice(value)}
+						error={error?.propertyPrice}
 					/>
 					<NumberInput
 						id="deposit"
@@ -45,6 +53,7 @@ const MortgageDetailsForm = ({ loanParameters, onChange, onSubmit }: MortgageDet
 						groupTextBefore={true}
 						onChange={(value) => onChange("deposit", value)}
 						validate={(value) => validateDeposit(value)}
+						error={error?.deposit}
 					/>
 					<NumberInput
 						id="term"
@@ -58,6 +67,7 @@ const MortgageDetailsForm = ({ loanParameters, onChange, onSubmit }: MortgageDet
 							onChange("mortgageTermInYears", value)
 						}
 						validate={(value) => validateMortgageTerm(value)}
+						error={error?.mortgageTermInYears}
 					/>
 					<NumberInput
 						id="interest"
@@ -72,13 +82,13 @@ const MortgageDetailsForm = ({ loanParameters, onChange, onSubmit }: MortgageDet
 							onChange("annualInterestRate", value)
 						}
 						validate={(value) => validateInterestRate(value)}
+						error={error?.annualInterestRate}
 					/>
 					<Button
 						className="w-full"
 						variant="primary"
 						aria-label="Calculate"
-						onClick={onSubmit}
-						disabled={disableButton}>
+						onClick={handleSubmit}>
 						Calculate
 					</Button>
 				</Form>

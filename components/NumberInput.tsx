@@ -16,6 +16,7 @@ type NumberInputProps = {
 	groupTextBefore?: boolean;
 	onChange: (value: number) => void;
 	validate?: (value: any) => string | undefined;
+	error?: string | undefined;
 };
 const NumberInput: React.FC<NumberInputProps> = ({
 	id,
@@ -32,11 +33,12 @@ const NumberInput: React.FC<NumberInputProps> = ({
 	groupText,
 	groupTextBefore,
 	validate,
+	error,
 }) => {
-	const [error, setError] = useState<string | undefined>(undefined);
+	const [fieldError, setFieldError] = useState<string | undefined>(error);
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const value = e.target.value;
-		validate && setError(validate(Number(value)));
+		validate && setFieldError(validate(Number(value)));
 		onChange(Number(value));
 	};
 

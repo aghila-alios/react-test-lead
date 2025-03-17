@@ -31,9 +31,17 @@ export const validateInterestRate = (value: Nullable<number>) => {
     return undefined;
 };
 
+export const validateDepositAgainstPropertyPrice = (pp: Nullable<number>, deposit: Nullable<number>) => {
+    if (deposit !== null && pp !== null && deposit > pp) {
+        return "Purchase price should be greater than deposit"
+    }
+
+    return validateDeposit(deposit)
+};
+
 export const validateLoanParameters = (lp: LoanParameters): LPErrorType => ({
     propertyPrice: validatePropertyPrice(lp.propertyPrice),
-    deposit: validateDeposit(lp.deposit),
+    deposit: validateDepositAgainstPropertyPrice(lp.propertyPrice, lp.deposit),
     mortgageTermInYears: validateMortgageTerm(lp.mortgageTermInYears),
     annualInterestRate: validateInterestRate(lp.annualInterestRate)
 })

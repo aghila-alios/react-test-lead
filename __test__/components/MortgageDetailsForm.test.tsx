@@ -38,32 +38,6 @@ describe("MortgageDetailsForm Component", () => {
 		expect(screen.getByLabelText("Interest rate")).toHaveValue(3.5);
 	});
 
-	test("verify  calculate button is disabled when any field is null", () => {
-		render(
-			<MortgageDetailsForm
-				loanParameters={{ ...defaultLoanParameters, propertyPrice: null }}
-				onChange={mockOnChange}
-				onSubmit={mockOnSubmit}
-			/>
-		);
-
-		const calculateButton = screen.getByRole("button", { name: /calculate/i });
-		expect(calculateButton).toBeDisabled();
-	});
-
-	test("enables calculate button when all fields are filled", () => {
-		render(
-			<MortgageDetailsForm
-				loanParameters={defaultLoanParameters}
-				onChange={mockOnChange}
-				onSubmit={mockOnSubmit}
-			/>
-		);
-
-		const calculateButton = screen.getByRole("button", { name: /calculate/i });
-		expect(calculateButton).toBeEnabled();
-	});
-
 	test("calls onSubmit when calculate button is clicked", () => {
 		render(
 			<MortgageDetailsForm
