@@ -13,7 +13,7 @@ describe("YearlyBreakdownPage component", () => {
 			remainingDebt: 5000,
 		},
 		{
-			year: 3,
+			year: 2,
 			remainingDebt: 0,
 		},
 	];
@@ -27,6 +27,9 @@ describe("YearlyBreakdownPage component", () => {
 		expect(
 			screen.getByRole("columnheader", { name: /Remaining Debt/i })
 		).toBeInTheDocument();
+		expect(screen.getByRole("cell", { name: /Year 0/i })).toBeInTheDocument();
+		expect(screen.getByRole("cell", { name: /Year 1/i })).toBeInTheDocument();
+		expect(screen.getByRole("cell", { name: /Year 2/i })).toBeInTheDocument();
 		expect(screen.getByRole("cell", { name: /£10,000/i })).toBeInTheDocument();
 		expect(screen.getByRole("cell", { name: /5,000/i })).toBeInTheDocument();
 		expect(screen.getByRole("cell", { name: /£0/i })).toBeInTheDocument();

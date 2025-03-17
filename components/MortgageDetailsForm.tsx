@@ -2,14 +2,22 @@
 import { Col, Form, Button } from "react-bootstrap";
 import NumberInput from "./NumberInput";
 import { LoanParameters } from "@/utils/types";
+import {
+	hasErrors,
+	validateDeposit,
+	validateInterestRate,
+	validateMortgageTerm,
+	validatePropertyPrice,
+} from "@/validation/validateMortgageFormFields";
 
 type MortgageDetailsFormProps = {
 	loanParameters: LoanParameters;
 	onChange: (key: string, value: number) => void;
 	onSubmit: () => void;
 };
+
 const MortgageDetailsForm = ({ loanParameters, onChange, onSubmit }: MortgageDetailsFormProps) => {
-	const buttonDisabled = Object.values(loanParameters).some((value) => value === null);
+	const disableButton = hasErrors(loanParameters);
 	return (
 		<>
 			<Col className="border-r" md="auto">
@@ -24,6 +32,7 @@ const MortgageDetailsForm = ({ loanParameters, onChange, onSubmit }: MortgageDet
 						groupText="£"
 						groupTextBefore={true}
 						onChange={(value) => onChange("propertyPrice", value)}
+						validate={(value) => validatePropertyPrice(value)}
 					/>
 					<NumberInput
 						id="deposit"
@@ -35,6 +44,7 @@ const MortgageDetailsForm = ({ loanParameters, onChange, onSubmit }: MortgageDet
 						groupText="£"
 						groupTextBefore={true}
 						onChange={(value) => onChange("deposit", value)}
+						validate={(value) => validateDeposit(value)}
 					/>
 					<NumberInput
 						id="term"
@@ -47,6 +57,7 @@ const MortgageDetailsForm = ({ loanParameters, onChange, onSubmit }: MortgageDet
 						onChange={(value: number) =>
 							onChange("mortgageTermInYears", value)
 						}
+						validate={(value) => validateMortgageTerm(value)}
 					/>
 					<NumberInput
 						id="interest"
@@ -60,13 +71,14 @@ const MortgageDetailsForm = ({ loanParameters, onChange, onSubmit }: MortgageDet
 						onChange={(value: number) =>
 							onChange("annualInterestRate", value)
 						}
+						validate={(value) => validateInterestRate(value)}
 					/>
 					<Button
 						className="w-full"
 						variant="primary"
 						aria-label="Calculate"
-						disabled={buttonDisabled}
-						onClick={onSubmit}>
+						onClick={onSubmit}
+						disabled={disableButton}>
 						Calculate
 					</Button>
 				</Form>

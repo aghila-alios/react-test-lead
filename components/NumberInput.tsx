@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Form, InputGroup } from "react-bootstrap";
 
 type NumberInputProps = {
@@ -15,6 +15,7 @@ type NumberInputProps = {
 	groupText?: string;
 	groupTextBefore?: boolean;
 	onChange: (value: number) => void;
+	validate?: (value: any) => string | undefined;
 };
 const NumberInput: React.FC<NumberInputProps> = ({
 	id,
@@ -30,9 +31,12 @@ const NumberInput: React.FC<NumberInputProps> = ({
 	disabled = false,
 	groupText,
 	groupTextBefore,
+	validate,
 }) => {
+	const [error, setError] = useState<string | undefined>(undefined);
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const value = e.target.value;
+		validate && setError(validate(Number(value)));
 		onChange(Number(value));
 	};
 
@@ -47,7 +51,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
 					id={id}
 					name={name}
 					type="number"
-					value={value !== null ? value : undefined}
+					value={value !== null ? value : ""}
 					onChange={handleChange}
 					className={className}
 					step={step}
@@ -63,6 +67,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
 					<InputGroup.Text>{groupText}</InputGroup.Text>
 				)}
 			</InputGroup>
+			<div style={{ color: "red" }}>{error}</div>
 		</>
 	);
 };

@@ -1,8 +1,8 @@
 "use client";
-import { formatCurrency } from "@/utils/formatCurrency";
 import { YearlyBreakdown } from "@/utils/types";
 import { Col, Table } from "react-bootstrap";
 import { FC } from "react";
+import { formatCurrency } from "@/utils/formatCurrency";
 type YearlyBreakdownPageProps = {
 	yearlyBreakdown: YearlyBreakdown[];
 };
@@ -28,19 +28,12 @@ const YearlyBreakdownPage: FC<YearlyBreakdownPageProps> = ({
 						</tr>
 					</thead>
 					<tbody>
-						{yearlyBreakdown.map(
-							(breakDownResult: YearlyBreakdown, index: number) => (
-								<tr key={index}>
-									<td>{breakDownResult.year}</td>
-									<td>
-										{formatCurrency(
-											breakDownResult.remainingDebt,
-											0
-										)}
-									</td>
-								</tr>
-							)
-						)}
+						{yearlyBreakdown.map((bd: YearlyBreakdown, index: number) => (
+							<tr key={index}>
+								<td>Year {bd.year}</td>
+								<td>{formatCurrency(bd.remainingDebt, 0)}</td>
+							</tr>
+						))}
 					</tbody>
 				</Table>
 			</Col>
